@@ -16,3 +16,20 @@ export function getUpcomingMusicValues() {
     },
   });
 }
+
+/*
+getUpcomingMusicValues()
+  .then((response) => {
+    return response.data.values;
+  })
+  .then((valuesRaw) => {
+    return valuesRaw.map(([artist, albumName, date, musicUrl, whoAdded]) => ({
+      artist,
+      albumName,
+      date: new Date(`${date} 2024`).toDateString(),
+      musicUrl,
+      whoAdded,
+    }));
+  })
+  .then((upcomingMusic) => console.log(upcomingMusic));
+*/
