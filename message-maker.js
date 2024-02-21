@@ -70,11 +70,29 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
 }
 
 /**
+ * Returns a Markdown-formatted string for a single upcoming release
+ * @param {Upcoming} upcoming An Upcoming release object
+ * @returns {string}
+ */
+function createMessageLinePerUpcoming(upcoming) {
+  const dayStr = Math.abs(upcoming.daysToRelease) > 1 ? "days" : "day";
+  const dateWritten = new Date(upcoming.dateReleased).toLocaleDateString(
+    "en-US",
+    { weekday: "long", month: "short", day: "numeric" },
+  );
+  return `🎵 **${upcoming.albumName}** by ${upcoming.artist} is out in **${upcoming.daysToRelease} ${dayStr}** on ${dateWritten} ([Apple Music](${upcoming.musicUrl}))`;
+}
+
+/**
  * Returns a Markdown-formatted upcomings messages based on the raw upcomings
  * @param {UpcomingsRaw} upcomingsRaw
  */
 function createMessageFromUpcomingsRaw(upcomingsRaw) {
-  console.log(convertUpcomingsRawToObjects(upcomingsRaw));
+  const releaseMessages = convertUpcomingsRawToObjects(upcomingsRaw)
+    .filter((upcoming) => upcoming.daysToRelease >= 0)
+    .map((upcoming) => createMessageLinePerUpcoming(upcoming));
+
+  console.log(releaseMessages);
 }
 
 module.exports = createMessageFromUpcomingsRaw;
