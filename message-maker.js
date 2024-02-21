@@ -1,4 +1,4 @@
-const getUpcomingMusicValues = require("./sheets");
+// const getUpcomingMusicValues = require("./sheets");
 
 /**
  * @typedef UpcomingsRaw
@@ -119,9 +119,9 @@ function createMessageFromUpcomingsRaw(upcomingsRaw) {
     .filter((upcoming) => upcoming.daysToRelease >= 0)
     .map((upcoming) => createMessageLinePerUpcoming(upcoming));
 
-  console.log(createFullMessage(releaseMessages));
+  return createFullMessage(releaseMessages);
 }
 
 module.exports = createMessageFromUpcomingsRaw;
 
-getUpcomingMusicValues().then(createMessageFromUpcomingsRaw);
+// getUpcomingMusicValues().then(createMessageFromUpcomingsRaw);
