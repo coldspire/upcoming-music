@@ -30,6 +30,19 @@ const UpcomingRawIndexes = {
 };
 
 /**
+ * Changes a date object to the string with format "DayOfWeek, ShortMonth Day"
+ * @param {Date} date
+ * @return {string}
+ */
+function changeDateToCommonStrFormat(date) {
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+/**
  * Returns the number of days since a release date.
  * @param {number} dateReleaseByEpoch
  * @return {number} A positive number in days if the release is in the future, zero if the release is today,
@@ -84,6 +97,20 @@ function createMessageLinePerUpcoming(upcoming) {
 }
 
 /**
+ * Returns the full message to send to Discord.
+ * @param {string[]} upcomings
+ * @returns {string}
+ */
+function createFullMessage(upcomings) {
+  const createSeparateLine = (str) => str + "\n";
+
+  return [
+    `### Upcoming Releases (as of ${changeDateToCommonStrFormat(new Date())})`,
+    ...upcomings,
+  ].reduce((combined, line) => combined + createSeparateLine(line), ``);
+}
+
+/**
  * Returns a Markdown-formatted upcomings messages based on the raw upcomings
  * @param {UpcomingsRaw} upcomingsRaw
  */
@@ -92,7 +119,7 @@ function createMessageFromUpcomingsRaw(upcomingsRaw) {
     .filter((upcoming) => upcoming.daysToRelease >= 0)
     .map((upcoming) => createMessageLinePerUpcoming(upcoming));
 
-  console.log(releaseMessages);
+  console.log(createFullMessage(releaseMessages));
 }
 
 module.exports = createMessageFromUpcomingsRaw;
