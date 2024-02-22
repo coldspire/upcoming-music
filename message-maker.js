@@ -1,5 +1,3 @@
-// const getUpcomingMusicValues = require("./sheets");
-
 /**
  * @typedef UpcomingsRaw
  * @type {array}
@@ -7,13 +5,18 @@
 
 /**
  * @typedef Upcoming
- * @type {object}
+ * @type {Object}
  * @property {string} artist
  * @property {string} albumName
  * @property {number} dateReleased
  * @property {number} daysToRelease
  * @property {string} musicUrl
  * @property {"Jason"|"Owen"} whoAdded
+ */
+
+/**
+ * @typedef {Object} UpcomingsByDate
+ * @property {Upcoming[]}
  */
 
 /**
@@ -83,31 +86,74 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
 }
 
 /**
+ *
+ * @param {Upcoming[]} upcomings
+ * @returns {Map}
+ */
+function createUpcomingCollections(upcomings) {
+  const upcomingCollections = new Map();
+  upcomings.forEach((upcoming) => {
+    const daysToReleaseKey = `${upcoming.daysToRelease}`;
+
+    if (!upcomingCollections.get(daysToReleaseKey)) {
+      upcomingCollections.set(daysToReleaseKey, [upcoming]);
+    } else {
+      upcomingCollections.set(daysToReleaseKey, [
+        ...upcomingCollections.get(daysToReleaseKey),
+        upcoming,
+      ]);
+    }
+  });
+
+  // Sort collections by album name
+  upcomingCollections.forEach((value, key, map) => {
+    map.set(
+      key,
+      value.sort((a, b) => a.albumName.localeCompare(b.albumName)),
+    );
+  });
+
+  return upcomingCollections;
+}
+
+/**
  * Returns a Markdown-formatted string for a single upcoming release
  * @param {Upcoming} upcoming An Upcoming release object
  * @returns {string}
  */
 function createMessageLinePerUpcoming(upcoming) {
-  const dayStr = Math.abs(upcoming.daysToRelease) > 1 ? "days" : "day";
-  const dateWritten = new Date(upcoming.dateReleased).toLocaleDateString(
-    "en-US",
-    { weekday: "long", month: "short", day: "numeric" },
-  );
-  return `🎵 **${upcoming.albumName}** by ${upcoming.artist} is out in **${upcoming.daysToRelease} ${dayStr}** on ${dateWritten} ([Apple Music](${upcoming.musicUrl}))`;
+  return `- [_${upcoming.albumName}_ by **${upcoming.artist}**](<${upcoming.musicUrl}>)`;
 }
 
 /**
  * Returns the full message to send to Discord.
- * @param {string[]} upcomings
+ * @param {Map} upcomingsCollections
  * @returns {string}
  */
-function createFullMessage(upcomings) {
+function createFullMessage(upcomingsCollections) {
   const createSeparateLine = (str) => str + "\n";
 
-  return [
-    `### Upcoming Releases (as of ${changeDateToCommonStrFormat(new Date())})`,
-    ...upcomings,
-  ].reduce((combined, line) => combined + createSeparateLine(line), ``);
+  let fullMessage = "";
+  upcomingsCollections.forEach((upcomings, daysToRelease) => {
+    const dayStr = Math.abs(upcomings[0].daysToRelease) > 1 ? "days" : "day";
+    const dateWritten = new Date(upcomings[0].dateReleased).toLocaleDateString(
+      "en-US",
+      {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+      },
+    );
+
+    fullMessage += createSeparateLine(
+      `🎧 Release in ${daysToRelease} ${dayStr} (${dateWritten})`,
+    );
+    upcomings.forEach((upcoming) => {
+      fullMessage += createSeparateLine(createMessageLinePerUpcoming(upcoming));
+    });
+  });
+
+  return fullMessage;
 }
 
 /**
@@ -115,13 +161,20 @@ function createFullMessage(upcomings) {
  * @param {UpcomingsRaw} upcomingsRaw
  */
 function createMessageFromUpcomingsRaw(upcomingsRaw) {
-  const releaseMessages = convertUpcomingsRawToObjects(upcomingsRaw)
-    .filter((upcoming) => upcoming.daysToRelease >= 0)
-    .map((upcoming) => createMessageLinePerUpcoming(upcoming));
+  const upcomings = convertUpcomingsRawToObjects(upcomingsRaw).filter(
+    (upcoming) => upcoming.daysToRelease >= 0,
+  );
 
-  return createFullMessage(releaseMessages);
+  const upcomingCollections = createUpcomingCollections(upcomings);
+
+  return createFullMessage(upcomingCollections);
 }
 
 module.exports = createMessageFromUpcomingsRaw;
 
-// getUpcomingMusicValues().then(createMessageFromUpcomingsRaw);
+/*
+const getUpcomingMusicValues = require("./sheets");
+getUpcomingMusicValues().then((upcomingsRaw) => {
+  console.log(createMessageFromUpcomingsRaw(upcomingsRaw));
+});
+ */
