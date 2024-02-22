@@ -40,7 +40,7 @@ const UpcomingRawIndexes = {
 function changeDateToCommonStrFormat(date) {
   return date.toLocaleDateString("en-US", {
     weekday: "long",
-    month: "short",
+    month: "long",
     day: "numeric",
   });
 }
@@ -122,7 +122,12 @@ function createUpcomingCollections(upcomings) {
  * @returns {string}
  */
 function createMessageLinePerUpcoming(upcoming) {
-  return `- [_${upcoming.albumName}_ by **${upcoming.artist}**](<${upcoming.musicUrl}>)`;
+  let messageLine = `- _${upcoming.albumName}_ by **${upcoming.artist}**`;
+  if (upcoming.musicUrl) {
+    messageLine += ` ([Listen](<${upcoming.musicUrl}>))`;
+  }
+
+  return messageLine;
 }
 
 /**
@@ -136,21 +141,17 @@ function createFullMessage(upcomingsCollections) {
   let fullMessage = "";
   upcomingsCollections.forEach((upcomings, daysToRelease) => {
     const dayStr = Math.abs(upcomings[0].daysToRelease) > 1 ? "days" : "day";
-    const dateWritten = new Date(upcomings[0].dateReleased).toLocaleDateString(
-      "en-US",
-      {
-        weekday: "long",
-        month: "short",
-        day: "numeric",
-      },
+    const dateWritten = changeDateToCommonStrFormat(
+      new Date(upcomings[0].dateReleased),
     );
 
     fullMessage += createSeparateLine(
-      `🎧 Release in ${daysToRelease} ${dayStr} (${dateWritten})`,
+      `🎧 Releasing in **${daysToRelease} ${dayStr}** (on ${dateWritten})`,
     );
     upcomings.forEach((upcoming) => {
       fullMessage += createSeparateLine(createMessageLinePerUpcoming(upcoming));
     });
+    fullMessage += `\n`;
   });
 
   return fullMessage;
