@@ -72,6 +72,12 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
       return !Number.isNaN(dateAsNum);
     })
     .map(([artist, albumName, dateReleasedStr, musicUrl, whoAdded]) => {
+      if (!artist || !albumName || !dateReleasedStr) {
+        throw Error(
+          `Necessary info for a release is missing. The artist, album name, and date-released for the release are: ${artist}, ${albumName}, ${dateReleasedStr}`,
+        );
+      }
+
       const dateReleased = Date.parse(`${dateReleasedStr} 2024`);
 
       return {
@@ -79,8 +85,8 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
         albumName,
         dateReleased,
         daysToRelease: getDaysToRelease(dateReleased),
-        musicUrl,
-        whoAdded,
+        musicUrl: musicUrl ?? "",
+        whoAdded: whoAdded ?? "",
       };
     });
 }
