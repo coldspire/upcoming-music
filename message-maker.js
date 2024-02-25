@@ -131,6 +131,23 @@ function createMessageLinePerUpcoming(upcoming) {
 }
 
 /**
+ * Create a releasing header for a series of upcomings on a given day
+ * @param {number} daysToRelease
+ * @param {Date} dateReleased
+ * @return {string}
+ */
+function createReleasingHeader(daysToRelease, dateReleased) {
+  const dateWritten = changeDateToCommonStrFormat(new Date(dateReleased));
+
+  if (daysToRelease === 0) {
+    return `💥 Releasing **TODAY!** (${dateWritten})`;
+  }
+
+  const dayStr = Math.abs(daysToRelease) > 1 ? "days" : "day";
+  return `🎧 Releasing in **${daysToRelease} ${dayStr}** (on ${dateWritten})`;
+}
+
+/**
  * Returns the full message to send to Discord.
  * @param {Map} upcomingsCollections
  * @returns {string}
@@ -139,14 +156,14 @@ function createFullMessage(upcomingsCollections) {
   const createSeparateLine = (str) => str + "\n";
 
   let fullMessage = "";
-  upcomingsCollections.forEach((upcomings, daysToRelease) => {
-    const dayStr = Math.abs(upcomings[0].daysToRelease) > 1 ? "days" : "day";
-    const dateWritten = changeDateToCommonStrFormat(
-      new Date(upcomings[0].dateReleased),
-    );
-
+  upcomingsCollections.forEach((upcomings) => {
     fullMessage += createSeparateLine(
-      `🎧 Releasing in **${daysToRelease} ${dayStr}** (on ${dateWritten})`,
+      // All the upcomings in this collection have the same daysToRelease and dateRelease,
+      // so we can just pass the values of the first upcoming
+      createReleasingHeader(
+        upcomings[0].daysToRelease,
+        upcomings[0].dateReleased,
+      ),
     );
     upcomings.forEach((upcoming) => {
       fullMessage += createSeparateLine(createMessageLinePerUpcoming(upcoming));
