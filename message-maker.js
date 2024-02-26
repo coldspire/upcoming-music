@@ -80,6 +80,12 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
 
       const dateReleased = Date.parse(`${dateReleasedStr} 2024`);
 
+      if (Number.isNaN(dateReleased)) {
+        throw Error(
+          `A date-released couldn't be parsed. The artist, album name, and date-released for the release are: ${artist}, ${albumName}, ${dateReleasedStr}`,
+        );
+      }
+
       return {
         artist,
         albumName,
