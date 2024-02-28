@@ -7,7 +7,7 @@
 		"wrangler-deploy": "wrangler deploy",
 		"wrangler-dev": "wrangler dev",
 		"start": "wrangler dev",
-		"discord-start": "node discord.js",
+		"discord-start": "node discord-client.js",
 		"discord-deploy": "node deploy-commands.js"
 	},
 	"keywords": [],
