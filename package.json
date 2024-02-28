@@ -1,19 +1,26 @@
 {
-  "name": "upcoming-music",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "start": "node discord.js",
-    "deploy-commands": "node deploy-commands.js"
-  },
-  "keywords": [],
-  "author": "Owen Anderson",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^1.6.7",
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.4.4",
-    "prettier": "^3.2.5",
-    "wrangler": "^3.29.0"
-  }
+	"name": "upcoming-music",
+	"version": "1.0.0",
+	"description": "",
+	"private": true,
+	"scripts": {
+		"wrangler-deploy": "wrangler deploy",
+		"wrangler-dev": "wrangler dev",
+		"start": "wrangler dev",
+		"discord-start": "node discord.js",
+		"discord-deploy": "node deploy-commands.js"
+	},
+	"keywords": [],
+	"author": "Owen Anderson",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^1.6.7",
+		"discord.js": "^14.14.1",
+		"dotenv": "^16.4.4",
+		"prettier": "^3.2.5",
+		"wrangler": "^3.29.0"
+	},
+	"devDependencies": {
+		"wrangler": "^3.0.0"
+	}
 }

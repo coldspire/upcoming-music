@@ -125,3 +125,8 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# wrangler project
+
+.dev.vars
+.wrangler/
