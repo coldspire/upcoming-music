@@ -5,11 +5,13 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
+		"dev": "wrangler dev src/server.js",
+		"ngrok": "ngrok http 8787",
+		"register": "node src/register.js",
+		"start": "node src/server.js",
 		"wrangler": "wrangler",
 		"wrangler-deploy": "wrangler deploy",
-		"wrangler-dev": "wrangler dev",
-		"register": "node src/register.js",
-		"start": "wrangler dev"
+		"wrangler-dev": "wrangler dev"
 	},
 	"keywords": [],
 	"author": "Owen Anderson",
