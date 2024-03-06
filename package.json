@@ -1,9 +1,10 @@
 {
 	"name": "upcoming-music",
 	"version": "1.0.0",
-	"description": "",
+	"description": "I'm in charge of regularly posting music releases for Jason and Owen.",
 	"type": "module",
 	"private": true,
+	"main": "src/server.js",
 	"scripts": {
 		"dev": "wrangler dev src/server.js",
 		"ngrok": "ngrok http 8787",
