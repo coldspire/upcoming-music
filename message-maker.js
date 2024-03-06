@@ -11,7 +11,7 @@
  * @property {number} dateReleased
  * @property {number} daysToRelease
  * @property {string} musicUrl
- * @property {"Jason"|"Owen"} whoAdded
+ * @property {'Jason'|'Owen'} whoAdded
  */
 
 /**
@@ -25,11 +25,11 @@
  * @enum {number}
  */
 const UpcomingRawIndexes = {
-  Artist: 0,
-  AlbumName: 1,
-  DateReleased: 2,
-  MusicUrl: 3,
-  WhoAdded: 4,
+	Artist: 0,
+	AlbumName: 1,
+	DateReleased: 2,
+	MusicUrl: 3,
+	WhoAdded: 4,
 };
 
 /**
@@ -38,11 +38,11 @@ const UpcomingRawIndexes = {
  * @return {string}
  */
 function changeDateToCommonStrFormat(date) {
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
+	return date.toLocaleDateString('en-US', {
+		weekday: 'long',
+		month: 'long',
+		day: 'numeric',
+	});
 }
 
 /**
@@ -52,9 +52,9 @@ function changeDateToCommonStrFormat(date) {
  *                  or a negative number if the release is in the past
  */
 function getDaysToRelease(dateReleaseByEpoch) {
-  const msPerDay = 60 * 60 * 24 * 1000;
-  const todayAtMidnightByEpoch = new Date().setHours(0, 0, 0, 0);
-  return Math.round((dateReleaseByEpoch - todayAtMidnightByEpoch) / msPerDay);
+	const msPerDay = 60 * 60 * 24 * 1000;
+	const todayAtMidnightByEpoch = new Date().setHours(0, 0, 0, 0);
+	return Math.round((dateReleaseByEpoch - todayAtMidnightByEpoch) / msPerDay);
 }
 
 /**
@@ -63,38 +63,36 @@ function getDaysToRelease(dateReleaseByEpoch) {
  * @return {Upcoming[]}
  */
 function convertUpcomingsRawToObjects(upcomingsRaw) {
-  return upcomingsRaw
-    .filter((upcomingRaw) => {
-      // At least get rid of stuff that includes alpha chars
-      const dateAsNum = Date.parse(
-        upcomingRaw[UpcomingRawIndexes.DateReleased],
-      );
-      return !Number.isNaN(dateAsNum);
-    })
-    .map(([artist, albumName, dateReleasedStr, musicUrl, whoAdded]) => {
-      if (!artist || !albumName || !dateReleasedStr) {
-        throw Error(
-          `Necessary info for a release is missing. The artist, album name, and date-released for the release are: ${artist}, ${albumName}, ${dateReleasedStr}`,
-        );
-      }
+	return upcomingsRaw
+		.filter((upcomingRaw) => {
+			// At least get rid of stuff that includes alpha chars
+			const dateAsNum = Date.parse(upcomingRaw[UpcomingRawIndexes.DateReleased]);
+			return !Number.isNaN(dateAsNum);
+		})
+		.map(([artist, albumName, dateReleasedStr, musicUrl, whoAdded]) => {
+			if (!artist || !albumName || !dateReleasedStr) {
+				throw Error(
+					`Necessary info for a release is missing. The artist, album name, and date-released for the release are: ${artist}, ${albumName}, ${dateReleasedStr}`,
+				);
+			}
 
-      const dateReleased = Date.parse(`${dateReleasedStr} 2024`);
+			const dateReleased = Date.parse(`${dateReleasedStr} 2024`);
 
-      if (Number.isNaN(dateReleased)) {
-        throw Error(
-          `A date-released couldn't be parsed. The artist, album name, and date-released for the release are: ${artist}, ${albumName}, ${dateReleasedStr}`,
-        );
-      }
+			if (Number.isNaN(dateReleased)) {
+				throw Error(
+					`A date-released couldn't be parsed. The artist, album name, and date-released for the release are: ${artist}, ${albumName}, ${dateReleasedStr}`,
+				);
+			}
 
-      return {
-        artist,
-        albumName,
-        dateReleased,
-        daysToRelease: getDaysToRelease(dateReleased),
-        musicUrl: musicUrl ?? "",
-        whoAdded: whoAdded ?? "",
-      };
-    });
+			return {
+				artist,
+				albumName,
+				dateReleased,
+				daysToRelease: getDaysToRelease(dateReleased),
+				musicUrl: musicUrl ?? '',
+				whoAdded: whoAdded ?? ',
+			};
+		});
 }
 
 /**
@@ -103,29 +101,26 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
  * @returns {Map}
  */
 function createUpcomingCollections(upcomings) {
-  const upcomingCollections = new Map();
-  upcomings.forEach((upcoming) => {
-    const daysToReleaseKey = `${upcoming.daysToRelease}`;
+	const upcomingCollections = new Map();
+	upcomings.forEach((upcoming) => {
+		const daysToReleaseKey = `${upcoming.daysToRelease}`;
 
-    if (!upcomingCollections.get(daysToReleaseKey)) {
-      upcomingCollections.set(daysToReleaseKey, [upcoming]);
-    } else {
-      upcomingCollections.set(daysToReleaseKey, [
-        ...upcomingCollections.get(daysToReleaseKey),
-        upcoming,
-      ]);
-    }
-  });
+		if (!upcomingCollections.get(daysToReleaseKey)) {
+			upcomingCollections.set(daysToReleaseKey, [upcoming]);
+		} else {
+			upcomingCollections.set(daysToReleaseKey, [...upcomingCollections.get(daysToReleaseKey), upcoming]);
+		}
+	});
 
-  // Sort collections by album name
-  upcomingCollections.forEach((value, key, map) => {
-    map.set(
-      key,
-      value.sort((a, b) => a.albumName.localeCompare(b.albumName)),
-    );
-  });
+	// Sort collections by album name
+	upcomingCollections.forEach((value, key, map) => {
+		map.set(
+			key,
+			value.sort((a, b) => a.albumName.localeCompare(b.albumName))
+		);
+	});
 
-  return upcomingCollections;
+	return upcomingCollections;
 }
 
 /**
@@ -134,12 +129,12 @@ function createUpcomingCollections(upcomings) {
  * @returns {string}
  */
 function createMessageLinePerUpcoming(upcoming) {
-  let messageLine = `- _${upcoming.albumName}_ by **${upcoming.artist}**`;
-  if (upcoming.musicUrl) {
-    messageLine += ` ([Listen](<${upcoming.musicUrl}>))`;
-  }
+	let messageLine = `- _${upcoming.albumName}_ by **${upcoming.artist}**`;
+	if (upcoming.musicUrl) {
+		messageLine += ` ([Listen](<${upcoming.musicUrl}>))`;
+	}
 
-  return messageLine;
+	return messageLine;
 }
 
 /**
@@ -149,14 +144,14 @@ function createMessageLinePerUpcoming(upcoming) {
  * @return {string}
  */
 function createReleasingHeader(daysToRelease, dateReleased) {
-  const dateWritten = changeDateToCommonStrFormat(new Date(dateReleased));
+	const dateWritten = changeDateToCommonStrFormat(new Date(dateReleased));
 
-  if (daysToRelease === 0) {
-    return `💥 Releasing **TODAY!** (${dateWritten})`;
-  }
+	if (daysToRelease === 0) {
+		return `💥 Releasing **TODAY!** (${dateWritten})`;
+	}
 
-  const dayStr = Math.abs(daysToRelease) > 1 ? "days" : "day";
-  return `🎧 Releasing in **${daysToRelease} ${dayStr}** (on ${dateWritten})`;
+	const dayStr = Math.abs(daysToRelease) > 1 ? 'days' : 'day';
+	return `🎧 Releasing in **${daysToRelease} ${dayStr}** (on ${dateWritten})`;
 }
 
 /**
@@ -165,25 +160,22 @@ function createReleasingHeader(daysToRelease, dateReleased) {
  * @returns {string}
  */
 function createFullMessage(upcomingsCollections) {
-  const createSeparateLine = (str) => str + "\n";
+	const createSeparateLine = (str) => str + '\n';
 
-  let fullMessage = "";
-  upcomingsCollections.forEach((upcomings) => {
-    fullMessage += createSeparateLine(
-      // All the upcomings in this collection have the same daysToRelease and dateRelease,
-      // so we can just pass the values of the first upcoming
-      createReleasingHeader(
-        upcomings[0].daysToRelease,
-        upcomings[0].dateReleased,
-      ),
-    );
-    upcomings.forEach((upcoming) => {
-      fullMessage += createSeparateLine(createMessageLinePerUpcoming(upcoming));
-    });
-    fullMessage += `\n`;
-  });
+	let fullMessage = '';
+	upcomingsCollections.forEach((upcomings) => {
+		fullMessage += createSeparateLine(
+			// All the upcomings in this collection have the same daysToRelease and dateRelease,
+			// so we can just pass the values of the first upcoming
+			createReleasingHeader(upcomings[0].daysToRelease, upcomings[0].dateReleased)
+		);
+		upcomings.forEach((upcoming) => {
+			fullMessage += createSeparateLine(createMessageLinePerUpcoming(upcoming));
+		});
+		fullMessage += `\n`;
+	});
 
-  return fullMessage;
+	return fullMessage;
 }
 
 /**
@@ -191,13 +183,11 @@ function createFullMessage(upcomingsCollections) {
  * @param {UpcomingsRaw} upcomingsRaw
  */
 function createMessageFromUpcomingsRaw(upcomingsRaw) {
-  const upcomings = convertUpcomingsRawToObjects(upcomingsRaw).filter(
-    (upcoming) => upcoming.daysToRelease >= 0,
-  );
+	const upcomings = convertUpcomingsRawToObjects(upcomingsRaw).filter((upcoming) => upcoming.daysToRelease >= 0);
 
-  const upcomingCollections = createUpcomingCollections(upcomings);
+	const upcomingCollections = createUpcomingCollections(upcomings);
 
-  return createFullMessage(upcomingCollections);
+	return createFullMessage(upcomingCollections);
 }
 
 module.exports = createMessageFromUpcomingsRaw;

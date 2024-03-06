@@ -7,6 +7,7 @@
 	"main": "src/server.js",
 	"scripts": {
 		"dev": "wrangler dev src/server.js",
+		"format": "prettier --write .",
 		"ngrok": "ngrok http 8787",
 		"publish": "wrangler deploy",
 		"register": "node src/register.js",
