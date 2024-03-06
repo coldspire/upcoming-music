@@ -37,6 +37,11 @@ router.post('/', async (request, env) => {
 	if (interaction.type === InteractionType.APPLICATION_COMMAND) {
 		switch (interaction.data.name.toLowerCase()) {
 			case UPCOMING_COMMAND.name.toLowerCase(): {
+				/*
+				TODO: Use these for the reply:
+				const upcomingsRaw = await getUpcomingMusicValues();
+				const replyMessage = createMessageFromUpcomingsRaw(upcomingsRaw);
+				*/
 				return new JsonResponse({
 					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 					data: {
