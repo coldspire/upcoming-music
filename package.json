@@ -7,6 +7,7 @@
 	"scripts": {
 		"dev": "wrangler dev src/server.js",
 		"ngrok": "ngrok http 8787",
+		"publish": "wrangler deploy",
 		"register": "node src/register.js",
 		"start": "node src/server.js",
 		"wrangler": "wrangler",
