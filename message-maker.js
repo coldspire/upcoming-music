@@ -90,7 +90,7 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
 				dateReleased,
 				daysToRelease: getDaysToRelease(dateReleased),
 				musicUrl: musicUrl ?? '',
-				whoAdded: whoAdded ?? ',
+				whoAdded: whoAdded ?? '',
 			};
 		});
 }
@@ -116,7 +116,7 @@ function createUpcomingCollections(upcomings) {
 	upcomingCollections.forEach((value, key, map) => {
 		map.set(
 			key,
-			value.sort((a, b) => a.albumName.localeCompare(b.albumName))
+			value.sort((a, b) => a.albumName.localeCompare(b.albumName)),
 		);
 	});
 
@@ -167,7 +167,7 @@ function createFullMessage(upcomingsCollections) {
 		fullMessage += createSeparateLine(
 			// All the upcomings in this collection have the same daysToRelease and dateRelease,
 			// so we can just pass the values of the first upcoming
-			createReleasingHeader(upcomings[0].daysToRelease, upcomings[0].dateReleased)
+			createReleasingHeader(upcomings[0].daysToRelease, upcomings[0].dateReleased),
 		);
 		upcomings.forEach((upcoming) => {
 			fullMessage += createSeparateLine(createMessageLinePerUpcoming(upcoming));
