@@ -190,7 +190,7 @@ function createMessageFromUpcomingsRaw(upcomingsRaw) {
 	return createFullMessage(upcomingCollections);
 }
 
-module.exports = createMessageFromUpcomingsRaw;
+export default createMessageFromUpcomingsRaw;
 
 /*
 const getUpcomingMusicValues = require("./sheets");

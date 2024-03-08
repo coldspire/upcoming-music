@@ -1,6 +1,8 @@
 import { Router } from 'itty-router';
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
 import { UPCOMING_COMMAND } from './commands.js';
+import getUpcomingMusicValues from './sheets.js';
+import createMessageFromUpcomingsRaw from './message-maker.js';
 
 class JsonResponse extends Response {
 	constructor(body, init) {
@@ -37,15 +39,12 @@ router.post('/', async (request, env) => {
 	if (interaction.type === InteractionType.APPLICATION_COMMAND) {
 		switch (interaction.data.name.toLowerCase()) {
 			case UPCOMING_COMMAND.name.toLowerCase(): {
-				/*
-				TODO: Use these for the reply:
-				const upcomingsRaw = await getUpcomingMusicValues();
+				const upcomingsRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
 				const replyMessage = createMessageFromUpcomingsRaw(upcomingsRaw);
-				*/
 				return new JsonResponse({
 					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 					data: {
-						content: 'Am I the only one grinding down my teeth?',
+						content: replyMessage,
 					},
 				});
 			}

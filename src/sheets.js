@@ -1,23 +1,17 @@
 const axios = require('axios').default;
 
-const {
-	env: { SHEETS_API_KEY, SHEET_ID },
-} = process;
-
-function getUpcomingMusicValues() {
+async function getUpcomingMusicValues(sheetsApiKey, musicSheetId) {
 	const range = 'All!A4:E100';
-	const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}`;
+	const address = `https://sheets.googleapis.com/v4/spreadsheets/${musicSheetId}/values/${range}`;
 
-	return axios
-		.get(url, {
-			params: {
-				key: SHEETS_API_KEY,
-			},
-		})
-		.then((response) => response.data.values);
+	const url = `${address}?` + new URLSearchParams({ key: sheetsApiKey }).toString();
+
+	return fetch(url)
+		.then((response) => response.json())
+		.then((data) => data.values);
 }
 
-module.exports = getUpcomingMusicValues;
+export default getUpcomingMusicValues;
 
 /*
 getUpcomingMusicValues()
