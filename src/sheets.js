@@ -1,5 +1,3 @@
-const axios = require('axios').default;
-
 async function getUpcomingMusicValues(sheetsApiKey, musicSheetId) {
 	const range = 'All!A4:E100';
 	const address = `https://sheets.googleapis.com/v4/spreadsheets/${musicSheetId}/values/${range}`;
