@@ -69,6 +69,7 @@ async function verifyDiscordRequest(request, env) {
 const server = {
 	verifyDiscordRequest,
 	fetch: async function (request, env) {
+		console.log(`Request info: timezone is ${request.cf.timezone}`);
 		return router.handle(request, env);
 	},
 };
