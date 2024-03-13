@@ -1,5 +1,3 @@
-import { convertUpcomingsRawToObjects, createUpcomingCollections } from './releases.js';
-
 /**
  * Changes a date object to the string with format "DayOfWeek, ShortMonth Day"
  * @param {Date} date
@@ -49,7 +47,7 @@ function createReleasingHeader(daysToRelease, dateReleased) {
  * @param {Map} upcomingsCollections
  * @returns {string}
  */
-function createFullMessage(upcomingsCollections) {
+function createMessageFromUpcomingReleases(upcomingsCollections) {
 	const createSeparateLine = (str) => str + '\n';
 
 	let fullMessage = '';
@@ -68,23 +66,4 @@ function createFullMessage(upcomingsCollections) {
 	return fullMessage;
 }
 
-/**
- * Returns a Markdown-formatted upcomings messages based on the raw upcomings
- * @param {UpcomingsRaw} upcomingsRaw
- */
-function createMessageFromUpcomingsRaw(upcomingsRaw) {
-	const upcomings = convertUpcomingsRawToObjects(upcomingsRaw).filter((upcoming) => upcoming.daysToRelease >= 0);
-
-	const upcomingCollections = createUpcomingCollections(upcomings);
-
-	return createFullMessage(upcomingCollections);
-}
-
-export default createMessageFromUpcomingsRaw;
-
-/*
-const getUpcomingMusicValues = require("./sheets");
-getUpcomingMusicValues().then((upcomingsRaw) => {
-  console.log(createMessageFromUpcomingsRaw(upcomingsRaw));
-});
- */
+export default createMessageFromUpcomingReleases;

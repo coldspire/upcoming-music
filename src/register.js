@@ -1,4 +1,4 @@
-import { UPCOMING_COMMAND } from './commands.js';
+import { MUSIC } from './commands.js';
 import dotenv from 'dotenv';
 import process from 'node:process';
 
@@ -26,7 +26,7 @@ if (!applicationId) {
  * you're sure these are the commands you want.
  */
 const url = `https://discord.com/api/v10/applications/${applicationId}/commands`;
-const commandsToRegister = [UPCOMING_COMMAND];
+const commandsToRegister = [MUSIC];
 
 const response = await fetch(url, {
 	headers: {
