@@ -1,4 +1,5 @@
 import createMessageFromUpcomingReleases from './message-maker.js';
+import { UpcomingSubCommand } from './commands.js';
 
 /**
  *
@@ -7,8 +8,9 @@ import createMessageFromUpcomingReleases from './message-maker.js';
  * @return {string}
  */
 function handleUpcomingRequest(upcomingDuration, releaseCollections) {
-	// TODO: Change this returned message based on upcomingDuration
-	return createMessageFromUpcomingReleases(releaseCollections); // This should be the Markdown string of releases
+	const daysLimit = upcomingDuration === UpcomingSubCommand.Soon ? 30 : 99999;
+	const collectionsToShow = new Map([...releaseCollections].filter(([daysUntil]) => Number(daysUntil) <= daysLimit));
+	return createMessageFromUpcomingReleases(collectionsToShow);
 }
 
 /**
