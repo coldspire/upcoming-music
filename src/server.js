@@ -1,21 +1,10 @@
 import { Router } from 'itty-router';
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
-import { UPCOMING_COMMAND } from './commands.js';
+import JsonResponse from './json-response.model.js';
+import { MUSIC } from './commands.js';
 import getUpcomingMusicValues from './sheets.js';
-import createMessageFromUpcomingsRaw from './message-maker.js';
-
-class JsonResponse extends Response {
-	constructor(body, init) {
-		const jsonBody = JSON.stringify(body);
-		init = init || {
-			headers: {
-				'Content-Type': 'application/json;charset=UTF-8',
-			},
-		};
-
-		super(jsonBody, init);
-	}
-}
+import { getMessageByMusicCommand } from './music-command.js';
+import { convertUpcomingsRawToObjects, createUpcomingCollections } from './releases.js';
 
 const router = Router();
 
@@ -38,13 +27,16 @@ router.post('/', async (request, env) => {
 
 	if (interaction.type === InteractionType.APPLICATION_COMMAND) {
 		switch (interaction.data.name.toLowerCase()) {
-			case UPCOMING_COMMAND.name.toLowerCase(): {
-				const upcomingsRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
-				const replyMessage = createMessageFromUpcomingsRaw(upcomingsRaw);
+			case MUSIC.name.toLowerCase(): {
+				const releasesRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
+				const releases = convertUpcomingsRawToObjects(releasesRaw).filter((upcoming) => upcoming.daysToRelease >= 0);
+				const releasesCollections = createUpcomingCollections(releases);
+				const messageContent = getMessageByMusicCommand(interaction, releasesCollections);
+
 				return new JsonResponse({
 					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 					data: {
-						content: replyMessage,
+						content: messageContent,
 					},
 				});
 			}

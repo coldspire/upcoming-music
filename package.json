@@ -10,7 +10,7 @@
 		"format": "prettier --write .",
 		"fix": "eslint --fix **/*.js",
 		"lint": "eslint **/*.js",
-		"ngrok": "ngrok http 8787",
+		"ngrok": "ngrok http --domain=casual-skilled-cicada.ngrok-free.app 8787",
 		"publish": "wrangler deploy",
 		"register": "node src/register.js",
 		"start": "node src/server.js",
