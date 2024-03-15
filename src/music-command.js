@@ -8,9 +8,16 @@ import { UpcomingSubCommand } from './commands.js';
  * @return {string}
  */
 function handleUpcomingRequest(upcomingDuration, releaseCollections) {
-	const daysLimit = upcomingDuration === UpcomingSubCommand.Soon ? 30 : 99999;
+	let daysLimit, header;
+	if (upcomingDuration === UpcomingSubCommand.Soon) {
+		daysLimit = 30;
+		header = '## ⌛  Releasing within the next 30 days';
+	} else {
+		daysLimit = 99999;
+		header = '## 📅  All future releases';
+	}
 	const collectionsToShow = new Map([...releaseCollections].filter(([daysUntil]) => Number(daysUntil) <= daysLimit));
-	return createMessageFromUpcomingReleases(collectionsToShow);
+	return createMessageFromUpcomingReleases(collectionsToShow, header);
 }
 
 /**

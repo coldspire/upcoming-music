@@ -45,12 +45,13 @@ function createReleasingHeader(daysToRelease, dateReleased) {
 /**
  * Returns the full message to send to Discord.
  * @param {Map} upcomingsCollections
+ * @param {string} header
  * @returns {string}
  */
-function createMessageFromUpcomingReleases(upcomingsCollections) {
+function createMessageFromUpcomingReleases(upcomingsCollections, header = '') {
 	const createSeparateLine = (str) => str + '\n';
 
-	let fullMessage = '';
+	let fullMessage = createSeparateLine(header ?? '');
 	upcomingsCollections.forEach((upcomings) => {
 		fullMessage += createSeparateLine(
 			// All the upcomings in this collection have the same daysToRelease and dateRelease,
