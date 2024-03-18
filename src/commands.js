@@ -12,6 +12,11 @@ export const MUSIC = {
 	description: 'Manages all music requests',
 	options: [
 		{
+			name: 'help',
+			description: 'List all available commands',
+			type: 1,
+		},
+		{
 			name: 'upcoming',
 			description: 'Get upcoming music releases',
 			type: 2, // SUB_COMMAND_GROUP,
@@ -30,3 +35,5 @@ export const MUSIC = {
 		},
 	],
 };
+
+export const allCommands = [MUSIC];
