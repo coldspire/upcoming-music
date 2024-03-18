@@ -2,9 +2,8 @@ import { Router } from 'itty-router';
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
 import JsonResponse from './json-response.model.js';
 import { MUSIC } from './commands.js';
-import getUpcomingMusicValues from './sheets.js';
+import getHelp from './help-command.js';
 import { getMessageByMusicCommand } from './music-command.js';
-import { convertUpcomingsRawToObjects, createUpcomingCollections } from './releases.js';
 
 const router = Router();
 
@@ -28,10 +27,17 @@ router.post('/', async (request, env) => {
 	if (interaction.type === InteractionType.APPLICATION_COMMAND) {
 		switch (interaction.data.name.toLowerCase()) {
 			case MUSIC.name.toLowerCase(): {
-				const releasesRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
-				const releases = convertUpcomingsRawToObjects(releasesRaw).filter((upcoming) => upcoming.daysToRelease >= 0);
-				const releasesCollections = createUpcomingCollections(releases);
-				const messageContent = getMessageByMusicCommand(interaction, releasesCollections);
+				const subcommandOrGroup = interaction.data.options[0]?.name.toLowerCase();
+
+				let messageContent = '';
+				switch (subcommandOrGroup) {
+					case 'help':
+						messageContent = getHelp();
+						break;
+					case 'upcoming':
+						messageContent = getMessageByMusicCommand(interaction, env);
+						break;
+				}
 
 				return new JsonResponse({
 					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
