@@ -1,21 +1,15 @@
 async function getUpcomingMusicValues(sheetsApiKey, musicSheetId) {
-	console.log('Getting Sheets data');
-
 	const range = 'All!A4:E100';
 	const address = `https://sheets.googleapis.com/v4/spreadsheets/${musicSheetId}/values/${range}`;
 
 	const url = `${address}?` + new URLSearchParams({ key: sheetsApiKey }).toString();
 
-	const results = await fetch(url)
+	return await fetch(url)
 		.then((response) => response.json())
 		.then((data) => data.values)
 		.catch((error) => {
 			console.error('Sheets API fetch failed for reason:', error.message);
 		});
-
-	console.log('Got Sheets data successfully');
-
-	return results;
 }
 
 export default getUpcomingMusicValues;
