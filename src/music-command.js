@@ -1,6 +1,5 @@
 import createMessageFromUpcomingReleases from './message-maker.js';
 import { UpcomingSubCommand } from './commands.js';
-import getUpcomingMusicValues from './sheets.js';
 import { convertUpcomingsRawToObjects, createUpcomingCollections } from './releases.js';
 
 /**
@@ -25,11 +24,11 @@ function handleUpcomingRequest(upcomingDuration, releaseCollections) {
 /**
  *
  * @param interaction
- * @param {Map} releaseCollections
+ * @param {object} env
+ * @param {object} releasesRaw
  * @return {string}
  */
-async function getMessageByMusicCommand(interaction, env) {
-	const releasesRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
+function getMessageByMusicCommand(interaction, env, releasesRaw) {
 	const releases = convertUpcomingsRawToObjects(releasesRaw).filter((upcoming) => upcoming.daysToRelease >= 0);
 	const releasesCollections = createUpcomingCollections(releases);
 

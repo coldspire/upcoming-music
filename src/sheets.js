@@ -4,9 +4,12 @@ async function getUpcomingMusicValues(sheetsApiKey, musicSheetId) {
 
 	const url = `${address}?` + new URLSearchParams({ key: sheetsApiKey }).toString();
 
-	return fetch(url)
+	return await fetch(url)
 		.then((response) => response.json())
-		.then((data) => data.values);
+		.then((data) => data.values)
+		.catch((error) => {
+			console.error('Sheets API fetch failed for reason:', error.message);
+		});
 }
 
 export default getUpcomingMusicValues;

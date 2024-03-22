@@ -3,6 +3,7 @@ import { InteractionResponseType, InteractionType, verifyKey } from 'discord-int
 import JsonResponse from './json-response.model.js';
 import { MUSIC } from './commands.js';
 import getHelp from './help-command.js';
+import getUpcomingMusicValues from './sheets.js';
 import { getMessageByMusicCommand } from './music-command.js';
 
 const router = Router();
@@ -11,7 +12,7 @@ router.get('/', (request, env) => {
 	return new Response(`😶 Take me back to Eden (${env.DISCORD_APPLICATION_ID})`);
 });
 
-router.post('/', async (request, env) => {
+router.post('/', async (request, env, releasesRaw) => {
 	const { isValid, interaction } = await server.verifyDiscordRequest(request, env);
 	if (!isValid || !interaction) {
 		return new Response('Bad request signature.', { status: 401 });
@@ -35,7 +36,7 @@ router.post('/', async (request, env) => {
 						messageContent = getHelp();
 						break;
 					case 'upcoming':
-						messageContent = getMessageByMusicCommand(interaction, env);
+						messageContent = getMessageByMusicCommand(interaction, env, releasesRaw);
 						break;
 				}
 
@@ -50,6 +51,9 @@ router.post('/', async (request, env) => {
 				return new JsonResponse({ error: 'Unknown type' }, { status: 400 });
 		}
 	}
+
+	console.error('Unknown Type');
+	return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
 });
 
 router.all('*', () => new Response('Not found.', { status: 404 }));
@@ -67,8 +71,8 @@ async function verifyDiscordRequest(request, env) {
 const server = {
 	verifyDiscordRequest,
 	fetch: async function (request, env) {
-		console.log(`Request info: timezone is ${request.cf.timezone}`);
-		return router.handle(request, env);
+		const releasesRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
+		return router.handle(request, env, releasesRaw);
 	},
 };
 
