@@ -51,6 +51,9 @@ router.post('/', async (request, env, releasesRaw) => {
 				return new JsonResponse({ error: 'Unknown type' }, { status: 400 });
 		}
 	}
+
+	console.error('Unknown Type');
+	return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
 });
 
 router.all('*', () => new Response('Not found.', { status: 404 }));
