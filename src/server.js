@@ -63,7 +63,8 @@ async function verifyDiscordRequest(request, env) {
 	const timestamp = request.headers.get('x-signature-timestamp');
 
 	const body = await request.text();
-	const isValidRequest = signature && timestamp && verifyKey(body, signature, timestamp, env.DISCORD_APPLICATION_PUBLIC_KEY);
+	const isKeyVerified = await verifyKey(body, signature, timestamp, env.DISCORD_APPLICATION_PUBLIC_KEY);
+	const isValidRequest = signature && timestamp && isKeyVerified;
 
 	return { interaction: JSON.parse(body), isValid: isValidRequest };
 }
@@ -72,7 +73,7 @@ const server = {
 	verifyDiscordRequest,
 	fetch: async function (request, env) {
 		const releasesRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
-		return router.handle(request, env, releasesRaw);
+		return router.fetch(request, env, releasesRaw);
 	},
 };
 
