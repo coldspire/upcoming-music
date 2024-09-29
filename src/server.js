@@ -72,7 +72,7 @@ const server = {
 	verifyDiscordRequest,
 	fetch: async function (request, env) {
 		const releasesRaw = await getUpcomingMusicValues(env.SHEETS_API_KEY, env.SHEET_ID);
-		return router.handle(request, env, releasesRaw);
+		return router.fetch(request, env, releasesRaw);
 	},
 };
 
