@@ -10,7 +10,6 @@
 		"format": "prettier --write .",
 		"fix": "eslint --fix **/*.js",
 		"lint": "eslint **/*.js",
-		"ngrok": "ngrok http --domain=casual-skilled-cicada.ngrok-free.app 8787",
 		"publish": "wrangler deploy",
 		"register": "node src/register.js",
 		"start": "node src/server.js",
@@ -33,7 +32,6 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-prettier": "^5.5.6",
 		"globals": "^15.14.0",
-		"ngrok": "v4.3.3",
 		"prettier": "^3.4.2",
 		"wrangler": "4.59.1"
 	}
