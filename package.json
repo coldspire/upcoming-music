@@ -12,7 +12,7 @@
 		"lint": "eslint **/*.js",
 		"ngrok": "ngrok http --domain=casual-skilled-cicada.ngrok-free.app 8787",
 		"publish": "wrangler deploy",
-		"register": "node src/register.js",
+		"discord-register-bot": "node src/discord-register-bot.js",
 		"start": "node src/server.js",
 		"wrangler": "wrangler",
 		"wrangler-deploy": "wrangler deploy",
