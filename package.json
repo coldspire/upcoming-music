@@ -12,7 +12,7 @@
 		"lint": "eslint **/*.js",
 		"ngrok": "ngrok http --domain=casual-skilled-cicada.ngrok-free.app 8787",
 		"publish": "wrangler deploy",
-		"register": "node src/register.js",
+		"discord-register-bot": "node src/discord-register-bot.js",
 		"start": "node src/server.js",
 		"wrangler": "wrangler",
 		"wrangler-deploy": "wrangler deploy",
@@ -27,14 +27,13 @@
 		"itty-router": "^5.0.18"
 	},
 	"devDependencies": {
-		"@eslint/eslintrc": "^3.2.0",
-		"@eslint/js": "^9.17.0",
-		"eslint": "^9.17.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-prettier": "^5.2.1",
+		"@eslint/eslintrc": "^3.3.6",
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.7.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-prettier": "^5.5.6",
 		"globals": "^15.14.0",
-		"ngrok": "^5.0.0-beta.2",
 		"prettier": "^3.4.2",
-		"wrangler": "^3.99.0"
+		"wrangler": "4.59.1"
 	}
 }

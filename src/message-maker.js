@@ -38,8 +38,11 @@ function createReleasingHeader(daysToRelease, dateReleased) {
 		return `💥 Releasing **TODAY!** (${dateWritten})`;
 	}
 
-	const dayStr = Math.abs(daysToRelease) > 1 ? 'days' : 'day';
-	return `🎧 Releasing in **${daysToRelease} ${dayStr}** (on ${dateWritten})`;
+	const daysAsWholeNumber = Math.abs(daysToRelease);
+	const dayStr = daysAsWholeNumber > 1 ? 'days' : 'day';
+	const messagePrefix = daysToRelease < 0 ? 'Released' : 'Releasing in';
+	const messageSuffix = daysToRelease < 0 ? 'ago ' : '';
+	return `🎧 ${messagePrefix} **${daysAsWholeNumber} ${dayStr}** ${messageSuffix}(on ${dateWritten})`;
 }
 
 /**

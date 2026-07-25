@@ -1,3 +1,8 @@
+const SubCommandType = Object.freeze({
+	SUB_COMMAND: 1,
+	SUB_COMMAND_GROUP: 2,
+});
+
 /**
  * @readonly
  * @enum {string}
@@ -14,24 +19,29 @@ export const MUSIC = {
 		{
 			name: 'help',
 			description: 'List all available commands',
-			type: 1,
+			type: SubCommandType.SUB_COMMAND,
 		},
 		{
 			name: 'upcoming',
 			description: 'Get upcoming music releases',
-			type: 2, // SUB_COMMAND_GROUP,
+			type: SubCommandType.SUB_COMMAND_GROUP,
 			options: [
 				{
 					name: UpcomingSubCommand.Soon,
 					description: 'Get upcoming music releases within the next month',
-					type: 1, // SUB_COMMAND
+					type: SubCommandType.SUB_COMMAND,
 				},
 				{
 					name: UpcomingSubCommand.All,
 					description: 'Get upcoming music releases within the next year',
-					type: 1,
+					type: SubCommandType.SUB_COMMAND,
 				},
 			],
+		},
+		{
+			name: 'current',
+			description: 'Get music releases between seven days ago and seven days from now',
+			type: SubCommandType.SUB_COMMAND,
 		},
 	],
 };
