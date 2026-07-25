@@ -91,7 +91,7 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
 				);
 			}
 
-			const dateReleased = Date.parse(`${dateReleasedStr} 2024`);
+			const dateReleased = Date.parse(`${dateReleasedStr}`);
 
 			if (Number.isNaN(dateReleased)) {
 				throw Error(
