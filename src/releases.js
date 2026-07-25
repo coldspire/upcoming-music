@@ -49,7 +49,7 @@ function getDaysToRelease(dateReleaseByEpoch) {
  * @param {Upcoming[]} upcomings
  * @returns {Map}
  */
-function createUpcomingCollections(upcomings) {
+function createReleaseCollections(upcomings) {
 	const upcomingCollections = new Map();
 	upcomings.forEach((upcoming) => {
 		const daysToReleaseKey = `${upcoming.daysToRelease}`;
@@ -110,4 +110,4 @@ function convertUpcomingsRawToObjects(upcomingsRaw) {
 		});
 }
 
-export { createUpcomingCollections, convertUpcomingsRawToObjects };
+export { createReleaseCollections, convertUpcomingsRawToObjects };

@@ -36,6 +36,7 @@ router.post('/', async (request, env, releasesRaw) => {
 						messageContent = getHelp();
 						break;
 					case 'upcoming':
+					case 'current':
 						messageContent = getMessageByMusicCommand(interaction, env, releasesRaw);
 						break;
 				}
